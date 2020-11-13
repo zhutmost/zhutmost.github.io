@@ -3,11 +3,11 @@
   <title>Haozhe Zhu&#39;s Blog</title>
   
   
-  <link href="https://zhutmost.github.io/atom.xml" rel="self"/>
+  <link href="https://zhutmost.com/atom.xml" rel="self"/>
   
-  <link href="https://zhutmost.github.io/"/>
+  <link href="https://zhutmost.com/"/>
   <updated>2020-08-15T15:34:05.077Z</updated>
-  <id>https://zhutmost.github.io/</id>
+  <id>https://zhutmost.com/</id>
   
   <author>
     <name>Haozhe Zhu</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="https://zhutmost.github.io/uncategorized/hello-world/"/>
-    <id>https://zhutmost.github.io/uncategorized/hello-world/</id>
+    <link href="https://zhutmost.com/uncategorized/hello-world/"/>
+    <id>https://zhutmost.com/uncategorized/hello-world/</id>
     <published>2019-10-02T14:50:46.000Z</published>
     <updated>2020-08-15T15:34:05.077Z</updated>
     
@@ -34,7 +34,7 @@
     
     
     
-    <category term="hello" scheme="https://zhutmost.github.io/tags/hello/"/>
+    <category term="hello" scheme="https://zhutmost.com/tags/hello/"/>
     
   </entry>
   

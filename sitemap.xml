@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://zhutmost.github.io/about/index.html</loc>
+    <loc>https://zhutmost.com/about/index.html</loc>
     
     <lastmod>2020-09-22</lastmod>
     
   </url>
   
   <url>
-    <loc>https://zhutmost.github.io/uncategorized/hello-world/</loc>
+    <loc>https://zhutmost.com/uncategorized/hello-world/</loc>
     
     <lastmod>2020-08-15</lastmod>
     
@@ -17,16 +17,16 @@
   
 
   <url>
-    <loc>https://zhutmost.github.io/</loc>
-    <lastmod>2020-09-22</lastmod>
+    <loc>https://zhutmost.com/</loc>
+    <lastmod>2020-11-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://zhutmost.github.io/tags/hello/</loc>
-    <lastmod>2020-09-22</lastmod>
+    <loc>https://zhutmost.com/tags/hello/</loc>
+    <lastmod>2020-11-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
