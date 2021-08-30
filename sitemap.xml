@@ -2,31 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://zhutmost.com/uncategorized/pynq-compile/</loc>
+    
+    <lastmod>2021-08-30</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://zhutmost.com/about/index.html</loc>
     
     <lastmod>2021-06-26</lastmod>
     
   </url>
   
-  <url>
-    <loc>https://zhutmost.com/uncategorized/hello-world/</loc>
-    
-    <lastmod>2020-08-15</lastmod>
-    
-  </url>
-  
 
   <url>
     <loc>https://zhutmost.com/</loc>
-    <lastmod>2021-06-29</lastmod>
+    <lastmod>2021-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://zhutmost.com/tags/hello/</loc>
-    <lastmod>2021-06-29</lastmod>
+    <loc>https://zhutmost.com/tags/fpga/</loc>
+    <lastmod>2021-08-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
