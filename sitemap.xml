@@ -22,7 +22,7 @@
 
   <url>
     <loc>https://zhutmost.com/</loc>
-    <lastmod>2022-03-25</lastmod>
+    <lastmod>2022-03-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -30,14 +30,14 @@
   
   <url>
     <loc>https://zhutmost.com/tags/fpga/</loc>
-    <lastmod>2022-03-25</lastmod>
+    <lastmod>2022-03-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/pynq/</loc>
-    <lastmod>2022-03-25</lastmod>
+    <lastmod>2022-03-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -46,7 +46,7 @@
   
   <url>
     <loc>https://zhutmost.com/categories/Engineering/</loc>
-    <lastmod>2022-03-25</lastmod>
+    <lastmod>2022-03-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
