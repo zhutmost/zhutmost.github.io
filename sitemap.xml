@@ -2,9 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://zhutmost.com/Engineering/github-ssh-443/</loc>
+    <loc>https://zhutmost.com/Research/asic-conf-ddl/</loc>
     
-    <lastmod>2022-07-30</lastmod>
+    <lastmod>2022-11-13</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -13,7 +13,16 @@
   <url>
     <loc>https://zhutmost.com/Engineering/pynq-compile/</loc>
     
-    <lastmod>2022-07-30</lastmod>
+    <lastmod>2022-11-13</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/Engineering/github-ssh-443/</loc>
+    
+    <lastmod>2022-11-13</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -31,29 +40,43 @@
 
   <url>
     <loc>https://zhutmost.com/</loc>
-    <lastmod>2022-09-26</lastmod>
+    <lastmod>2022-11-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://zhutmost.com/tags/github/</loc>
-    <lastmod>2022-09-26</lastmod>
+    <loc>https://zhutmost.com/tags/Paper-Lives-Matter/</loc>
+    <lastmod>2022-11-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://zhutmost.com/tags/fpga/</loc>
-    <lastmod>2022-09-26</lastmod>
+    <loc>https://zhutmost.com/tags/AI-Chip/</loc>
+    <lastmod>2022-11-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://zhutmost.com/tags/pynq/</loc>
-    <lastmod>2022-09-26</lastmod>
+    <loc>https://zhutmost.com/tags/GitHub/</loc>
+    <lastmod>2022-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/tags/FPGA/</loc>
+    <lastmod>2022-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/tags/PYNQ/</loc>
+    <lastmod>2022-11-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -61,8 +84,15 @@
 
   
   <url>
+    <loc>https://zhutmost.com/categories/Research/</loc>
+    <lastmod>2022-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://zhutmost.com/categories/Engineering/</loc>
-    <lastmod>2022-09-26</lastmod>
+    <lastmod>2022-11-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
