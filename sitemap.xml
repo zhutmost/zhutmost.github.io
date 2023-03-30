@@ -4,7 +4,7 @@
   <url>
     <loc>https://zhutmost.com/Research/asic-conf-ddl/</loc>
     
-    <lastmod>2023-01-29</lastmod>
+    <lastmod>2023-03-30</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -40,7 +40,7 @@
 
   <url>
     <loc>https://zhutmost.com/</loc>
-    <lastmod>2023-03-11</lastmod>
+    <lastmod>2023-03-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -48,35 +48,35 @@
   
   <url>
     <loc>https://zhutmost.com/tags/Paper-Lives-Matter/</loc>
-    <lastmod>2023-03-11</lastmod>
+    <lastmod>2023-03-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/AI-Chip/</loc>
-    <lastmod>2023-03-11</lastmod>
+    <lastmod>2023-03-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/GitHub/</loc>
-    <lastmod>2023-03-11</lastmod>
+    <lastmod>2023-03-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/FPGA/</loc>
-    <lastmod>2023-03-11</lastmod>
+    <lastmod>2023-03-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/PYNQ/</loc>
-    <lastmod>2023-03-11</lastmod>
+    <lastmod>2023-03-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -85,14 +85,14 @@
   
   <url>
     <loc>https://zhutmost.com/categories/Research/</loc>
-    <lastmod>2023-03-11</lastmod>
+    <lastmod>2023-03-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/categories/Engineering/</loc>
-    <lastmod>2023-03-11</lastmod>
+    <lastmod>2023-03-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
