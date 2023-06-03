@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://zhutmost.com/Engineering/chipmunk-regneg/</loc>
+    
+    <lastmod>2023-06-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/Engineering/chipmunk-master-slave/</loc>
+    
+    <lastmod>2023-06-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://zhutmost.com/Research/asic-conf-ddl/</loc>
     
     <lastmod>2023-06-03</lastmod>
@@ -76,6 +94,20 @@
   
   <url>
     <loc>https://zhutmost.com/tags/GitHub/</loc>
+    <lastmod>2023-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/tags/Chisel/</loc>
+    <lastmod>2023-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/tags/Chipmunk/</loc>
     <lastmod>2023-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
