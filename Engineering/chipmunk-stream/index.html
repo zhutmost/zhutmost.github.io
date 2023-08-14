@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>🐿️ Chipmunk Docs - DecoupledIO 增强版之 StreamIO - Haozhe Zhu&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Haozhe Zhu&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Haozhe Zhu&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="在数字电路设计中，我们经常使用 Ready&amp;#x2F;Valid 握手协议来解耦数据流，Chisel 提供了 DecoupledIO 用以实现这一协议。然而，DecoupledIO 仅是一个预置的 Bundle，缺少与之配套的一系列常用组件（例如寄存器切片、Mux&amp;#x2F;Demux 等），此外它也未能搭配 chipmunk.IsMasterSlave。chipmunk 为 DecoupledI"><meta property="og:type" content="blog"><meta property="og:title" content="🐿️ Chipmunk Docs - DecoupledIO 增强版之 StreamIO"><meta property="og:url" content="https://zhutmost.com/Engineering/chipmunk-stream/"><meta property="og:site_name" content="Haozhe Zhu&#039;s Blog"><meta property="og:description" content="在数字电路设计中，我们经常使用 Ready&amp;#x2F;Valid 握手协议来解耦数据流，Chisel 提供了 DecoupledIO 用以实现这一协议。然而，DecoupledIO 仅是一个预置的 Bundle，缺少与之配套的一系列常用组件（例如寄存器切片、Mux&amp;#x2F;Demux 等），此外它也未能搭配 chipmunk.IsMasterSlave。chipmunk 为 DecoupledI"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://zhutmost.com/Engineering/chipmunk-stream/ready-valid-protocol.png"><meta property="og:image" content="https://zhutmost.com/Engineering/chipmunk-stream/stream-payload-operation.png"><meta property="article:published_time" content="2023-08-09T06:07:49.239Z"><meta property="article:modified_time" content="2023-08-14T12:17:07.672Z"><meta property="article:author" content="Haozhe Zhu"><meta property="article:tag" content="Chisel"><meta property="article:tag" content="Chipmunk"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://zhutmost.com/Engineering/chipmunk-stream/ready-valid-protocol.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhutmost.com/Engineering/chipmunk-stream/"},"headline":"🐿️ Chipmunk Docs - DecoupledIO 增强版之 StreamIO","image":["https://zhutmost.com/Engineering/chipmunk-stream/ready-valid-protocol.png","https://zhutmost.com/Engineering/chipmunk-stream/stream-payload-operation.png"],"datePublished":"2023-08-09T06:07:49.239Z","dateModified":"2023-08-14T12:17:07.672Z","author":{"@type":"Person","name":"Haozhe Zhu"},"publisher":{"@type":"Organization","name":"Haozhe Zhu's Blog","logo":{"@type":"ImageObject","url":"https://zhutmost.com/img/logo.png"}},"description":"在数字电路设计中，我们经常使用 Ready&#x2F;Valid 握手协议来解耦数据流，Chisel 提供了 DecoupledIO 用以实现这一协议。然而，DecoupledIO 仅是一个预置的 Bundle，缺少与之配套的一系列常用组件（例如寄存器切片、Mux&#x2F;Demux 等），此外它也未能搭配 chipmunk.IsMasterSlave。chipmunk 为 DecoupledI"}</script><link rel="canonical" href="https://zhutmost.com/Engineering/chipmunk-stream/"><link rel="alternate" href="/atom.xml" title="Haozhe Zhu&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.png"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-HD0ZXF4S69" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-HD0ZXF4S69');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.png" alt="Haozhe Zhu&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2023-08-09T06:07:49.239Z" title="8/9/2023, 2:07:49 PM">2023-08-09</time></span><span class="level-item">Updated&nbsp;<time dateTime="2023-08-14T12:17:07.672Z" title="8/14/2023, 8:17:07 PM">2023-08-14</time></span><span class="level-item"><a class="link-muted" href="/categories/Engineering/">Engineering</a></span></div></div><h1 class="title is-3 is-size-4-mobile">🐿️ Chipmunk Docs - DecoupledIO 增强版之 StreamIO</h1><div class="content"><p>在数字电路设计中，我们经常使用 Ready&#x2F;Valid 握手协议来解耦数据流，Chisel 提供了 <code>DecoupledIO</code> 用以实现这一协议。<br>然而，<code>DecoupledIO</code> 仅是一个预置的 <code>Bundle</code>，缺少与之配套的一系列常用组件（例如寄存器切片、Mux&#x2F;Demux 等），此外它也未能搭配 <code>chipmunk.IsMasterSlave</code>。<code>chipmunk</code> 为 <code>DecoupledIO</code> 提供了一个“威力加强版”的 Ready&#x2F;Valid 握手协议——<code>chipmunk.StreamIO</code>。</p>
+<span id="more"></span>
+
+<h2 id="Ready-Valid-握手协议"><a href="#Ready-Valid-握手协议" class="headerlink" title="Ready&#x2F;Valid 握手协议"></a>Ready&#x2F;Valid 握手协议</h2><img src="/Engineering/chipmunk-stream/ready-valid-protocol.png" class="" title="Ready&#x2F;Valid Interface">
+
+<p>Ready&#x2F;Valid 握手协议由三部分信号组成：</p>
+<ul>
+<li><code>valid</code>：表示数据有效，即上游数据已经准备好，可以被消费；</li>
+<li><code>ready</code>：表示数据可被消费，即下游已经准备好接收数据；</li>
+<li><code>bits</code>（即 <code>payload</code>）：表示数据本身。</li>
+</ul>
+<p>其中，<code>valid</code> 和 <code>bits</code> 信号由上游产生，<code>ready</code> 信号由下游产生。当 <code>valid</code> 和 <code>ready</code> 信号同时有效时，<code>bits</code> 信号被传递，即数据被消费。利用这一协议，我们可以将数据流的生产和消费解耦：上游模块只需要在准备好数据后将 <code>valid</code> 和 <code>bits</code> 信号置为有效，而无需关心下游模块内部的状态；而下游模块只需要在准备好接收数据后将 <code>ready</code> 信号置为有效，当 <code>valid</code> 和 <code>ready</code> 信号同时有效时取走 <code>bits</code> 数据。通过使用 Ready&#x2F;Valid 握手协议，开发者可以将注意力集中在自己负责的电路逻辑上，而无需过度关心其他模块的内部实现，从而提高开发效率。</p>
+<p>需要注意的是，为了避免组合逻辑环路，我们要求 <code>valid</code>（及 <code>bits</code>）和 <code>ready</code> 信号不能同时依赖对方的当前状态。因此，在 Chipmunk（和其他绝大多数数字电路设计）中，我们约定 <code>valid</code> 不允许依赖于 <code>ready</code> 的当前状态，即上游模块不允许根据下游模块此刻是否 <code>ready</code> 来决定当前周期是否将 <code>valid</code> 置为有效。简单地说，用于 <code>valid</code> 产生的组合逻辑表达式中不能出现下游模块的 <code>ready</code> 信号。</p>
+<p>关于 Ready&#x2F;Valid 握手协议的更多细节，网上已经有了丰富的材料可以参考，这里不再赘述。</p>
+<h2 id="关于-StreamIO"><a href="#关于-StreamIO" class="headerlink" title="关于 StreamIO"></a>关于 <code>StreamIO</code></h2><h3 id="Why"><a href="#Why" class="headerlink" title="Why?"></a>Why?</h3><p>Chisel 提供了 <code>DecoupledIO</code> 和 <code>IrrevocableIO</code> 两个 Ready&#x2F;Valid 握手协议的 <code>Bundle</code> 实现，它们都继承自 <code>chisel3.ReadyValidIO</code>。Chisel 并未为这两个接口提供太多 API，基本上只有：</p>
+<ul>
+<li><code>def fire: Bool = ready &amp;&amp; valid</code>，表示当前周期是否发生了数据传输；</li>
+<li><code>class Queue</code>，以 <code>ReadyValidIO</code> 为接口的同步 FIFO；</li>
+<li><code>def map[T](f: T =&gt; T2): T</code>，用于对 <code>bits</code> 进行变换。</li>
+</ul>
+<p><code>IrrevocableIO</code> 其实在实现上 <code>DecoupledIO</code> 并无区别，只是约定它的 <code>bits</code> 在 <code>valid</code> 有效但 <code>ready</code> 无效时不会改变，即数据不可撤回。两者的实际差别有赖于具体模块中的电路实现。</p>
+<p>很显然，上述 API 不足以应付实际的设计需求。</p>
+<p>Chipmunk 在 <code>chisel3.ReadyValidIO</code> 的基础上提供了 <code>chipmunk.StreamIO</code>，它继承自 <code>chisel3.ReadyValidIO</code>，并提供了一系列常用的 API 和特性，包括：</p>
+<ul>
+<li>一系列类似<code>fire</code>的语法糖，展现数据传输的不同状态；</li>
+<li>符号化的连接方法，类似 <code>a &gt;&gt; b &gt;-&gt; c</code>，可以很容易地看出数据的流向；</li>
+<li>针对 <code>bits</code> 的一系列操作，包括 Map、Cast 等；</li>
+<li>一系列常用的组件，包括寄存器切片（Register Slice）、Fork&#x2F;Join、Mux&#x2F;Demux 等。</li>
+</ul>
+<p><code>StreamIO</code> 在实现上参考了 <a target="_blank" rel="noopener" href="https://spinalhdl.github.io/SpinalDoc-RTD/master/SpinalHDL/Libraries/stream.html">SpinalHDL</a> 的 <code>Stream</code> 的 API 设计，熟悉 SpinalHDL 的同学应该会有一丝熟悉的感觉。</p>
+<h3 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h3><h4 id="StreamIO-例化"><a href="#StreamIO-例化" class="headerlink" title="StreamIO 例化"></a>StreamIO 例化</h4><ul>
+<li><p>创建一个 <code>StreamIO</code>，其 <code>payload</code> 类型为 <code>UInt</code>：</p>
+<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> myStream = <span class="type">Wire</span>(<span class="type">Stream</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>)))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建一个 <code>StreamIO</code>，其 <code>payload</code> 类型和另一个 <code>DecoupledIO</code> 的 <code>bits</code> 一致：</p>
+<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> myDecoupled = <span class="type">Wire</span>(<span class="type">Decoupled</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>)))</span><br><span class="line"><span class="keyword">val</span> myStream = <span class="type">Wire</span>(<span class="type">Stream</span>(myDecoupled))</span><br></pre></td></tr></table></figure>
+<p>请注意这里 <code>myStream</code> 不会与 <code>myDecoupled</code> 有任何电路连接（比如共享 <code>bits</code>），而是会创建一个新的 <code>UInt</code> 作为 <code>payload</code>。</p>
+</li>
+<li><p>创建一个空的 <code>StreamIO</code>（即其 <code>payload</code> 类型为 <code>EmptyBundle</code>）：</p>
+<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> myStream = <span class="type">Wire</span>(<span class="type">Stream</span>.empty)</span><br></pre></td></tr></table></figure>
+<p>空的 <code>StreamIO</code> 一般用于声明时没有确定 <code>payload</code> 类型的情况，后续可以搭配 <code>payloadReplace</code> 等 API 赋予具体的 <code>payload</code>。</p>
+</li>
+</ul>
+<h4 id="流控与状态指示"><a href="#流控与状态指示" class="headerlink" title="流控与状态指示"></a>流控与状态指示</h4><p><code>StreamIO</code> 提供以下状态指示方法，它们的返回类型均为 <code>Bool</code>：</p>
+<table>
+<thead>
+<tr>
+<th align="left">语法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>x.fire</code></td>
+<td align="left">当前周期正在进行数据传输，即 <code>ready &amp;&amp; valid</code></td>
+</tr>
+<tr>
+<td align="left"><code>x.isPending</code></td>
+<td align="left">上游数据已经就绪，但下游未能准备好接收，即 <code>!ready &amp;&amp; valid</code></td>
+</tr>
+<tr>
+<td align="left"><code>x.isStarving</code></td>
+<td align="left">下游已准备好接收数据，但上游没有发起传输，即 <code>ready &amp;&amp; !valid</code></td>
+</tr>
+</tbody></table>
+<p><code>StreamIO</code> 也提供下列方法对数据流进行流控，它们会返回一个新的 <code>StreamIO</code>：</p>
+<table>
+<thead>
+<tr>
+<th align="left">语法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>x.haltWhen(cond)</code></td>
+<td align="left">当 <code>cond</code> 为 <code>True</code> 时，数据传输会被阻断，即上下游模块均无法完成握手。</td>
+</tr>
+<tr>
+<td align="left"><code>x.continueWhen(cond)</code></td>
+<td align="left">相当于 <code>x.haltWhen(!cond)</code></td>
+</tr>
+<tr>
+<td align="left"><code>x.throwWhen(cond)</code></td>
+<td align="left">当 <code>cond</code> 为 <code>True</code> 时，数据传输会被丢弃，即上游模块发起的数据传输都会成功握手，但下游模块不会收到相应的数据。</td>
+</tr>
+<tr>
+<td align="left"><code>x.takeWhen(cond)</code></td>
+<td align="left">相当于 <code>x.throwWhen(!cond)</code></td>
+</tr>
+</tbody></table>
+<h4 id="Payload-变换"><a href="#Payload-变换" class="headerlink" title="Payload 变换"></a>Payload 变换</h4><img src="/Engineering/chipmunk-stream/stream-payload-operation.png" class="" title="StreamIO Payload Operation">
+
+<p><code>StreamIO</code> 允许对 <code>payload</code> 直接进行一系列变换，包括：</p>
+<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">payloadMap</span></span>[<span class="type">T2</span> &lt;: <span class="type">Data</span>](f: <span class="type">T</span> =&gt; <span class="type">T2</span>): <span class="type">StreamIO</span>[<span class="type">T2</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">payloadReplace</span></span>[<span class="type">T2</span> &lt;: <span class="type">Data</span>](p: <span class="type">T2</span>): <span class="type">StreamIO</span>[<span class="type">T2</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">payloadCast</span></span>[<span class="type">T2</span> &lt;: <span class="type">Data</span>](gen: <span class="type">T2</span>, checkWidth: <span class="type">Boolean</span> = <span class="literal">false</span>): <span class="type">StreamIO</span>[<span class="type">T2</span>]</span><br></pre></td></tr></table></figure>
+
+<p>上述方法会返回一个新的 <code>StreamIO</code>，其 <code>payload</code> 会变成变换后、类型为 <code>T2</code> 的新信号，同时其 <code>ready</code> 和 <code>valid</code> 信号会连接到当前 <code>StreamIO</code> 的 <code>ready</code> 和 <code>valid</code> 信号。</p>
+<ul>
+<li><p><code>payloadMap</code> 可以将函数 <code>f</code> 作用于 <code>payload</code>，比如：</p>
+<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamOld = <span class="type">Wire</span>(<span class="type">Stream</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>)))</span><br><span class="line"><span class="keyword">val</span> <span class="type">StreamNew</span> = streamOld.payloadMap(_ + <span class="number">1.</span><span class="type">U</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>payloadReplace</code> 会将 <code>payload</code> 替换为 <code>p</code>，相当于 <code>payloadMap(_ =&gt; p)</code>，比如：</p>
+<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamOld = <span class="type">Wire</span>(<span class="type">Stream</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>)))</span><br><span class="line"><span class="keyword">val</span> anotherBool = <span class="type">Wire</span>(<span class="type">Bool</span>())</span><br><span class="line"><span class="keyword">val</span> <span class="type">StreamNew</span> = streamOld.payloadReplace(anotherBool)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>payloadCast</code> 会对 <code>payload</code> 进行强制类型转换，相当于 <code>payloadMap(_.asTypeOf(gen))</code>，比如：</p>
+<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamOld = <span class="type">Wire</span>(<span class="type">Stream</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>)))</span><br><span class="line"><span class="keyword">val</span> <span class="type">StreamNew</span> = streamOld.payloadCast(<span class="type">SInt</span>(<span class="number">32.</span><span class="type">W</span>), checkWidth = <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p>其中参数 <code>checkWidth = true</code> 允许检查类型转换前后的位宽是否一致，如果不一致抛出异常。该参数默认为 <code>false</code>，即不会检查位宽，如果位宽不一致会自动截断或扩展。</p>
+</li>
+</ul>
+<h4 id="寄存器切片（Register-Slice）"><a href="#寄存器切片（Register-Slice）" class="headerlink" title="寄存器切片（Register Slice）"></a>寄存器切片（Register Slice）</h4><p>为 <code>StreamIO</code> 插入寄存器切片以改善时序，是一个常见的需求。然而，这实现起来非常繁琐且易错。显然，我们不能直接在 <code>StreamIO</code> 的 <code>ready</code>&#x2F;<code>valid</code>&#x2F;<code>bits</code> 路径上贸然插入寄存器切片。<code>valid</code> 和 <code>ready</code> 分别代表当前周期上游模块和下游模块的状态，在它们的传播通路上引入寄存器会导致状态延后若干周期才会传播到对侧。这会导致上下游模块无法在正确的时机完成握手，可能会引起数据丢失或吞吐下降。</p>
+<p>根据寄存器插入位置不同，<code>StreamIO</code> 提供：</p>
+<ul>
+<li><code>pipeForward</code>：前向寄存器切片，切断从上游模块到下游模块的 <code>valid</code> 和 <code>bits</code> 通路的组合逻辑路径；<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamNew = streamOld.pipeForward()</span><br></pre></td></tr></table></figure>
+它在性能上不会引入吞吐下降（虽然会增加 1 周期延时），在面积上代价是 N + 1 个寄存器（N 是 <code>bits</code> 位宽）以及少量组合逻辑。</li>
+<li><code>pipeBackward</code>：后向寄存器切片，切断从下游模块到上游模块的 <code>ready</code> 通路的组合逻辑路径。<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamNew = streamOld.pipeBackward()</span><br></pre></td></tr></table></figure>
+它在性能上不会引入额外的延时和吞吐下降，在面积上代价是 N + 1 个寄存器（N 是 <code>bits</code> 位宽）、N 个 2:1 MUX 以及少量组合逻辑。</li>
+<li><code>pipeAll</code>：双向寄存器切片，同时切断 <code>valid</code>、<code>bits</code>、<code>ready</code> 通路的组合逻辑路径。<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamNew = streamOld.pipeAll()</span><br></pre></td></tr></table></figure>
+相当于 <code>streamOld.pipeForward().pipeBackward()</code>，因此它会引入 2N + 2 个寄存器（N 是 <code>bits</code> 位宽）、N 个 2:1 MUX 以及少量组合逻辑。</li>
+<li><code>pipeSimple</code>：双向寄存器切片，同时切断 <code>valid</code>、<code>bits</code>、<code>ready</code> 通路的组合逻辑路径。<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamNew = streamOld.pipeSimple()</span><br></pre></td></tr></table></figure>
+它至多每隔一个周期握手一次，因此会引起最高可达一半的吞吐损失，但面积上只需要 N + 2 个寄存器以及少量的组合逻辑。与 <code>pipeAll</code> 相比，它的面积代价更小，但会引入额外的性能损失。</li>
+<li><code>pipeValid</code>：仅切断 <code>valid</code> 通路的组合逻辑路径。<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamNew = streamOld.pipeValid()</span><br></pre></td></tr></table></figure>
+面积上仅需要 1 个寄存器和少量组合逻辑。</li>
+<li><code>pipPassThrough</code>：什么都不做，返回当前的 <code>StreamIO</code>。<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> streamNew = streamOld.pipPassThrough()</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="符号化连接"><a href="#符号化连接" class="headerlink" title="符号化连接"></a>符号化连接</h4><p><code>StreamIO</code> 提供了一系列方法用于连接其他 <code>StreamIO</code>：</p>
+<table>
+<thead>
+<tr>
+<th align="left">语法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>x.connectFrom(y)</code></td>
+<td align="left">用 <code>y</code> 驱动 <code>x</code>，即 <code>y</code> 作为 <code>x</code> 的上游进行连接 <code>ready</code>、<code>valid</code>、<code>bits</code> 信号</td>
+</tr>
+<tr>
+<td align="left"><code>x.handshakeFrom(y)</code></td>
+<td align="left">和 <code>connectFrom</code> 类似，但只连接 <code>ready</code>、<code>valid</code> 信号，不连接 <code>bits</code> 信号</td>
+</tr>
+<tr>
+<td align="left"><code>x &lt;&lt; y</code></td>
+<td align="left">相当于 <code>x.connectFrom(y)</code>，返回 <code>y</code></td>
+</tr>
+<tr>
+<td align="left"><code>x &gt;&gt; y</code></td>
+<td align="left">相当于 <code>y.connectFrom(x)</code>，返回 <code>y</code></td>
+</tr>
+<tr>
+<td align="left"><code>x &lt;-&lt; y</code></td>
+<td align="left">相当于 <code>x &lt;&lt; y.pipeForward()</code>，返回 <code>y</code></td>
+</tr>
+<tr>
+<td align="left"><code>x &gt;-&gt; y</code></td>
+<td align="left">相当于 <code>x.pipeForward() &gt;&gt; y</code>，返回 <code>y</code></td>
+</tr>
+<tr>
+<td align="left"><code>x &lt;|&lt; y</code></td>
+<td align="left">相当于 <code>x &lt;&lt; y.pipeBackward()</code>，返回 <code>y</code></td>
+</tr>
+<tr>
+<td align="left"><code>x &gt;|&gt; y</code></td>
+<td align="left">相当于 <code>x.pipeBackward() &gt;&gt; y</code>，返回 <code>y</code></td>
+</tr>
+<tr>
+<td align="left"><code>x &lt;+&lt; y</code></td>
+<td align="left">相当于 <code>x &lt;&lt; y.pipeAll()</code>，返回 <code>y</code></td>
+</tr>
+<tr>
+<td align="left"><code>x &gt;+&gt; y</code></td>
+<td align="left">相当于 <code>x.pipeAll() &gt;&gt; y</code>，返回 <code>y</code></td>
+</tr>
+</tbody></table>
+<p>借助 <code>&lt;&lt;</code>、<code>&gt;&gt;</code> 等流操作符，我们可以实现可读性较强的 <code>StreamIO</code> 连接甚至级连，比如：</p>
+<figure class="highlight scala"><figcaption><span>Code Snippet</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> s1 = <span class="type">Stream</span>(<span class="type">UInt</span>(<span class="number">8.</span><span class="type">W</span>))</span><br><span class="line">s1 &lt;-&lt; uAnotherModule.io.outStream</span><br><span class="line">s1.haltWhen(somethingEnable) &gt;&gt; uSomeModule.io.inStream</span><br></pre></td></tr></table></figure>
+
+<h2 id="配套组件"><a href="#配套组件" class="headerlink" title="配套组件"></a>配套组件</h2><p>Chipmunk 包括了一系列 <code>StreamIO</code> 的配套组件。</p>
+<h3 id="StreamFork-StreamJoin"><a href="#StreamFork-StreamJoin" class="headerlink" title="StreamFork&#x2F;StreamJoin"></a>StreamFork&#x2F;StreamJoin</h3><p>StreamFork 可以将一个上游 <code>StreamIO</code> 分叉成多个下游 <code>StreamIO</code>，每个下游 <code>StreamIO</code> 会分别完成仅一次握手，上游 <code>StreamIO</code> 会在所有下游 <code>StreamIO</code> 完成握手后才完成握手。为了提高性能，每个下游 <code>StreamIO</code> 是否握手是独立进行的，当它 <code>ready</code> 有效时即完成握手，而不需要等到所有下游 <code>StreamIO</code> 的 <code>ready</code> 都有效。</p>
+<p>StreamJoin 可以将多个上游 <code>StreamIO</code> 合并成一个下游 <code>StreamIO</code>，当且仅当所有上游 <code>StreamIO</code> 的 <code>valid</code> 都有效时，才会发生握手。</p>
+<p>在 <code>object StreamFork</code>&#x2F;<code>object StreamJoin</code> 中，Chipmunk 提供了多个接口略有差别的方法。用户可以阅读代码中的注释，根据自己的需求选择合适的方法。</p>
+<h3 id="StreamMux-Demux-…"><a href="#StreamMux-Demux-…" class="headerlink" title="StreamMux&#x2F;Demux&#x2F;…"></a>StreamMux&#x2F;Demux&#x2F;…</h3><p>TODO</p>
+<h2 id="See-Also"><a href="#See-Also" class="headerlink" title="See Also"></a>See Also</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/zhutmost/chipmunk">Chipmunk Github</a></li>
+</ul>
+<p><a style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-size:12px;line-height:1.2;display:inline-block;border-radius:3px" href="https://unsplash.com/photos/0pJPixfGfVo" target="_blank" rel="noopener noreferrer" title="Near Sorrento, 1863 by John Brett"><span style="display:inline-block;padding:2px 3px"><svg xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;position:relative;vertical-align:middle;top:-1px;fill:white" viewBox="0 0 32 32"><path d="M20.8 18.1c0 2.7-2.2 4.8-4.8 4.8s-4.8-2.1-4.8-4.8c0-2.7 2.2-4.8 4.8-4.8 2.7.1 4.8 2.2 4.8 4.8zm11.2-7.4v14.9c0 2.3-1.9 4.3-4.3 4.3h-23.4c-2.4 0-4.3-1.9-4.3-4.3v-15c0-2.3 1.9-4.3 4.3-4.3h3.7l.8-2.3c.4-1.1 1.7-2 2.9-2h8.6c1.2 0 2.5.9 2.9 2l.8 2.4h3.7c2.4 0 4.3 1.9 4.3 4.3zm-8.6 7.5c0-4.1-3.3-7.5-7.5-7.5-4.1 0-7.5 3.4-7.5 7.5s3.3 7.5 7.5 7.5c4.2-.1 7.5-3.4 7.5-7.5z"></path></svg></span><span style="display:inline-block;padding:2px 3px">photoed by Birmingham Museums</span></a></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>🐿️ Chipmunk Docs - DecoupledIO 增强版之 StreamIO</p><p><a href="https://zhutmost.com/Engineering/chipmunk-stream/">https://zhutmost.com/Engineering/chipmunk-stream/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Haozhe Zhu</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2023-08-09</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2023-08-14</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="CC BY-NC-ND 4.0" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><i class="icon fab fa-creative-commons-by"></i><i class="icon fab fa-creative-commons-nc"></i><i class="icon fab fa-creative-commons-nd"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Chisel/">Chisel</a><a class="link-muted mr-2" rel="tag" href="/tags/Chipmunk/">Chipmunk</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Research/asic-conf-ddl-2024/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">2024年智能芯片领域会议概览</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/uncategorized/chipmunk-bits-misc/"><span class="level-item">🐿️ Chipmunk - Bits/Data 等的更多方法</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><script src="https://utteranc.es/client.js" repo="zhutmost/zhutmost.github.io" issue-term="pathname" label="utterances" theme="github-light" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.jpeg" alt="Haozhe Zhu"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Haozhe Zhu</p><p class="is-size-6 is-block">IC &amp; AI Developer</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Shanghai, China</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">2</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">4</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/zhutmost" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/zhutmost"><i class="fa-brands fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Google Scholar" href="https://scholar.google.com/citations?user=L9U6i6YAAAAJ&amp;hl=en"><i class="fa-brands fa-google"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/atom.xml"><i class="fa-solid fa-rss"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Mail" href="mailto:zhutmost@outlook.com"><i class="fas fa-envelope"></i></a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#Ready-Valid-握手协议"><span class="level-left"><span class="level-item">1</span><span class="level-item">Ready/Valid 握手协议</span></span></a></li><li><a class="level is-mobile" href="#关于-StreamIO"><span class="level-left"><span class="level-item">2</span><span class="level-item">关于 StreamIO</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Why"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">Why?</span></span></a></li><li><a class="level is-mobile" href="#Usage"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">Usage</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#StreamIO-例化"><span class="level-left"><span class="level-item">2.2.1</span><span class="level-item">StreamIO 例化</span></span></a></li><li><a class="level is-mobile" href="#流控与状态指示"><span class="level-left"><span class="level-item">2.2.2</span><span class="level-item">流控与状态指示</span></span></a></li><li><a class="level is-mobile" href="#Payload-变换"><span class="level-left"><span class="level-item">2.2.3</span><span class="level-item">Payload 变换</span></span></a></li><li><a class="level is-mobile" href="#寄存器切片（Register-Slice）"><span class="level-left"><span class="level-item">2.2.4</span><span class="level-item">寄存器切片（Register Slice）</span></span></a></li><li><a class="level is-mobile" href="#符号化连接"><span class="level-left"><span class="level-item">2.2.5</span><span class="level-item">符号化连接</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#配套组件"><span class="level-left"><span class="level-item">3</span><span class="level-item">配套组件</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#StreamFork-StreamJoin"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">StreamFork/StreamJoin</span></span></a></li><li><a class="level is-mobile" href="#StreamMux-Demux-…"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">StreamMux/Demux/…</span></span></a></li></ul></li><li><a class="level is-mobile" href="#See-Also"><span class="level-left"><span class="level-item">4</span><span class="level-item">See Also</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><figure class="media-left"><a class="image" href="/Research/asic-conf-ddl-2024/"><img src="/thumbnail/harvest-fields-hallingham.jpg" alt="2024年智能芯片领域会议概览"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-08-14T06:31:19.000Z">2023-08-14</time></p><p class="title"><a href="/Research/asic-conf-ddl-2024/">2024年智能芯片领域会议概览</a></p><p class="categories"><a href="/categories/Research/">Research</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-08-09T06:07:49.239Z">2023-08-09</time></p><p class="title"><a href="/Engineering/chipmunk-stream/">🐿️ Chipmunk Docs - DecoupledIO 增强版之 StreamIO</a></p><p class="categories"><a href="/categories/Engineering/">Engineering</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/uncategorized/chipmunk-bits-misc/"><img src="/thumbnail/naples-jwsmith.jpg" alt="🐿️ Chipmunk - Bits/Data 等的更多方法"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-06-10T13:21:59.059Z">2023-06-10</time></p><p class="title"><a href="/uncategorized/chipmunk-bits-misc/">🐿️ Chipmunk - Bits/Data 等的更多方法</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/uncategorized/chipmunk-regneg/"><img src="/thumbnail/naples-jwsmith.jpg" alt="🐿️ Chipmunk - 下降沿触发寄存器 RegNeg"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-06-02T15:12:02.048Z">2023-06-02</time></p><p class="title"><a href="/uncategorized/chipmunk-regneg/">🐿️ Chipmunk - 下降沿触发寄存器 RegNeg</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/uncategorized/chipmunk-master-slave/"><img src="/thumbnail/naples-jwsmith.jpg" alt="🐿️ Chipmunk - 用 Master/Slave 定义 Bundle 方向"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-04-20T16:28:02.000Z">2023-04-21</time></p><p class="title"><a href="/uncategorized/chipmunk-master-slave/">🐿️ Chipmunk - 用 Master/Slave 定义 Bundle 方向</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Engineering/"><span class="level-start"><span class="level-item">Engineering</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Research/"><span class="level-start"><span class="level-item">Research</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI-Chip/"><span class="tag">AI Chip</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chipmunk/"><span class="tag">Chipmunk</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chisel/"><span class="tag">Chisel</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Paper-Lives-Matter/"><span class="tag">Paper Lives Matter</span><span class="tag">2</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.png" alt="Haozhe Zhu&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2023 Haozhe Zhu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="GitHub" href="https://github.com/zhutmost"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
