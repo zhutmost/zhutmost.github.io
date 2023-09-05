@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>FICS 服务器集群使用指南 - Haozhe Zhu&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Haozhe Zhu&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Haozhe Zhu&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="FICS 总体情况介绍FICS 服务器集群（FICS Is Computing Service, 下称 FICS）是芯片院的 EDA 与 AI 计算集群，包括若干计算队列：  Hopfield - CPU 计算队列，用于 EDA 计算 Boltzmann - CPU 计算队列，用于 EDA 计算 Makkapakka - CPU&amp;#x2F;GPU 计算队列，用于 AI&amp;#x2F;GPU 计算  F"><meta property="og:type" content="blog"><meta property="og:title" content="FICS 服务器集群使用指南"><meta property="og:url" content="https://zhutmost.com/about/fics.html"><meta property="og:site_name" content="Haozhe Zhu&#039;s Blog"><meta property="og:description" content="FICS 总体情况介绍FICS 服务器集群（FICS Is Computing Service, 下称 FICS）是芯片院的 EDA 与 AI 计算集群，包括若干计算队列：  Hopfield - CPU 计算队列，用于 EDA 计算 Boltzmann - CPU 计算队列，用于 EDA 计算 Makkapakka - CPU&amp;#x2F;GPU 计算队列，用于 AI&amp;#x2F;GPU 计算  F"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://zhutmost.com/thumbnail/harvest-fields-hallingham.jpg"><meta property="article:published_time" content="2023-09-03T10:00:00.000Z"><meta property="article:modified_time" content="2023-09-05T07:29:01.027Z"><meta property="article:author" content="Haozhe Zhu"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://zhutmost.com/thumbnail/harvest-fields-hallingham.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhutmost.com/about/fics.html"},"headline":"FICS 服务器集群使用指南","image":["https://zhutmost.com/thumbnail/harvest-fields-hallingham.jpg"],"datePublished":"2023-09-03T10:00:00.000Z","dateModified":"2023-09-05T07:29:01.027Z","author":{"@type":"Person","name":"Haozhe Zhu"},"publisher":{"@type":"Organization","name":"Haozhe Zhu's Blog","logo":{"@type":"ImageObject","url":"https://zhutmost.com/img/logo.png"}},"description":"FICS 总体情况介绍FICS 服务器集群（FICS Is Computing Service, 下称 FICS）是芯片院的 EDA 与 AI 计算集群，包括若干计算队列：  Hopfield - CPU 计算队列，用于 EDA 计算 Boltzmann - CPU 计算队列，用于 EDA 计算 Makkapakka - CPU&#x2F;GPU 计算队列，用于 AI&#x2F;GPU 计算  F"}</script><link rel="canonical" href="https://zhutmost.com/about/fics.html"><link rel="alternate" href="/atom.xml" title="Haozhe Zhu&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.png"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-HD0ZXF4S69" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-HD0ZXF4S69');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.png" alt="Haozhe Zhu&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><div class="card-image"><span class="image is-7by3"><img class="fill" src="/thumbnail/harvest-fields-hallingham.jpg" alt="FICS 服务器集群使用指南"></span></div><article class="card-content article" role="article"><h1 class="title is-3 is-size-4-mobile">FICS 服务器集群使用指南</h1><div class="content"><h2 id="FICS-总体情况介绍"><a href="#FICS-总体情况介绍" class="headerlink" title="FICS 总体情况介绍"></a>FICS 总体情况介绍</h2><p>FICS 服务器集群（FICS Is Computing Service, 下称 FICS）是芯片院的 EDA 与 AI 计算集群，包括若干计算队列：</p>
+<ul>
+<li>Hopfield - CPU 计算队列，用于 EDA 计算</li>
+<li>Boltzmann - CPU 计算队列，用于 EDA 计算</li>
+<li>Makkapakka - CPU&#x2F;GPU 计算队列，用于 AI&#x2F;GPU 计算</li>
+</ul>
+<p>FICS 的主要架构如下图所示：</p>
+<p><img src="/about/fics/fics-overview.jpg" alt="FICS Overview"></p>
+<p>用户所有的操作都在登陆节点 <code>mgmt01</code> 上进行，计算任务需要用户手动提交到计算节点上进行。</p>
+<p>请在使用 FICS 之前务必确认并理解：</p>
+<ul>
+<li>妥善保管好您的账号、密码、VNC 密码！</li>
+<li>用户不允许在 FICS 上从事任何盈利性或其他与芯片院科研学习无关的工作；</li>
+<li>用户不允许未经指导老师和管理员同意，将 FICS 上的任何文件分享到芯片院之外；</li>
+<li>用户应当及时备份自己的文件和数据，FICS 尽可能保护您的数据安全，但无法做任何承诺；</li>
+<li>提问之前请先阅读本文档和谷歌搜索，几乎所有问题都可以找到答案。</li>
+</ul>
+<h2 id="用户文档"><a href="#用户文档" class="headerlink" title="用户文档"></a>用户文档</h2><h3 id="账号管理"><a href="#账号管理" class="headerlink" title="账号管理"></a>账号管理</h3><p>FICS 部署了专门的邮件系统，用于用户账号管理。您可以通过向系统发送邮件完成账号申请、密码重置等操作。绝大多数操作都是自动化的，您无需等待管理员的回复。</p>
+<p>系统邮箱：<code>techcrew@fics.top</code>，请严格按照下列操作说明发送邮件。请不要通过这个邮箱联系管理员，如需邮件联系管理员请阅读<a href="#%E9%82%AE%E4%BB%B6%E8%81%94%E7%B3%BB%E7%AE%A1%E7%90%86%E5%91%98">文末的管理说明</a>。</p>
+<p>注意事项:</p>
+<ol>
+<li>发送邮件前请确保邮箱可以正常收发邮件；</li>
+<li>不要频繁发送邮件到系统中，系统处理邮件需要一定的时间，所以请耐心等待；</li>
+<li>收到系统自动回复时间一般不超过 5 分钟（网络波动除外）；</li>
+<li>若超过 5 分钟收不到系统回复邮件可以先查看垃圾邮箱。</li>
+</ol>
+<h4 id="账号申请"><a href="#账号申请" class="headerlink" title="账号申请"></a>账号申请</h4><p>请使用您的学号&#x2F;工号邮箱进行下列操作（申请完成后您的账号会和您申请所用邮箱绑定）：</p>
+<ol>
+<li>发送以 <code>adduser xxxx</code> 为标题的邮件到上述系统邮箱 (邮件标题前后没有空格，<code>xxxx</code> 为所需要申请到用户名，邮件内容任意)；</li>
+<li>系统收到邮件后会在 3 分钟之内自动回复标题为“FICS: adduser wait for ack”的邮件，并等待管理员通过创建；</li>
+<li>管理员会审核您的账号申请，无论通过与否，您都会收到一封说明邮件。</li>
+</ol>
+<p>请注意：</p>
+<ul>
+<li>如果您是芯片院的学生，请使用学号邮箱申请，且在发送邮件时必须抄送（<code>cc</code>）您的的日常指导老师，否则管理员不会受理；</li>
+<li>由于 FICS 的用户日见增多，我们不再接受个性化的用户名（管理员需要对应到现实中的人），请参考以下几种例子选择用户名（例如我叫“朱浩哲”）：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">名前姓后拼音全拼：haozhezhu 或 haozhe_zhu</span><br><span class="line">姓前名后拼音全拼：zhuhaozhe</span><br><span class="line">名前姓后且名使用拼音首字母：hzzhu（不推荐）</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="密码重置"><a href="#密码重置" class="headerlink" title="密码重置"></a>密码重置</h4><p>使用申请账号时所使用的邮箱：</p>
+<ol>
+<li>发送以 <code>resetpassword xxxx</code> 为标题的邮件到上述系统邮箱（邮件标题前后没有空格，<code>xxxx</code> 为需要重置密码的用户名，邮件内容任意）；</li>
+<li>系统收到邮件后会在 3 分钟之内处理请求并重置邮件对应账号的密码，并自动回复带有新密码的邮件（系统会检查重置的账号和邮箱的关联性，只有账号关联邮箱才会执行重置密码操作，无关联邮件会被无视）。</li>
+</ol>
+<h4 id="获取-FICS-文档"><a href="#获取-FICS-文档" class="headerlink" title="获取 FICS 文档"></a>获取 FICS 文档</h4><p>使用申请账号时所使用的邮箱：</p>
+<ol>
+<li>发送以 <code>documentations</code> 为标题的邮件到上述系统邮箱（邮件标题前后没有空格，邮件内容任意）。</li>
+<li>系统收到邮件后会在 3 分钟之内处理请求并回复您。</li>
+</ol>
+<p>鉴于您正在阅读本文档，您可以无视这一功能。</p>
+<h4 id="更改默认-Shell"><a href="#更改默认-Shell" class="headerlink" title="更改默认 Shell"></a>更改默认 Shell</h4><p>使用申请账号时所使用的邮箱：</p>
+<p>使用申请账号时所使用的邮箱：</p>
+<ol>
+<li>发送以 <code>chsh xxxx</code> 为标题的邮件到上述系统邮箱（邮件标题前后没有空格，<code>xxxx</code> 为需要设置的shell名字，如<code>zsh</code>、<code>bash</code>等，邮件内容任意）;</li>
+<li>系统收到邮件后会在 3 分钟之内自动处理请求，请您重新登录您的账号。</li>
+</ol>
+<p><code>bash</code> 是您申请账号时的默认 Shell，<code>zsh</code> 比它功能更丰富（搭配 Oh-My-Zsh 等）但速度更慢。</p>
+<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><h4 id="如何登录-FICS"><a href="#如何登录-FICS" class="headerlink" title="如何登录 FICS"></a>如何登录 FICS</h4><p>FICS 的登陆节点是 <code>mgmt01</code>，您可以通过 SSH 登陆到该节点上，您可以使用任何支持 SSH 的终端工具：</p>
+<ul>
+<li>Terminal （Linux&#x2F;macOS）</li>
+<li>PowerShell（Windows，自带）</li>
+<li>Putty（Windows，需另行安装，不推荐）</li>
+</ul>
+<p>如果您目前处在校园网内，您可以直接使用 <code>ssh</code> 命令登陆：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh username@10.155.102.33</span><br><span class="line"><span class="comment"># 也可以使用下面这个（如果不想背出 IP 地址的话）</span></span><br><span class="line">ssh username@fics.local.zhutmost.com</span><br></pre></td></tr></table></figure>
+<p>其中 <code>username</code> 是您的用户名。</p>
+<!-- 如果您目前处在非校园网环境，您可以采取以下两种方式之一： -->
+<!-- 1. 使用学校 VPN、肉身进校等手段进入学校校园网环境，然后按照上面的方式登陆； -->
+<!-- 2. 在校外环境可以 SSH 连接反向代理域名 `fics.top`： -->
+<!--    ```bash -->
+<!--    ssh username@fics.top -->
+<!--    ``` -->
+<!--    由于反向代理的域名登录网络有带宽限制，在校内网环境下，不推荐使用这一方法。 -->
+
+<p>如果您成功登录，您会看到类似这样的界面：</p>
+<p><img src="/about/fics/fics-ssh-login.jpg" alt="FICS SSH Login"></p>
+<p>请注意登录过程中需要您输入您的密码（在您申请账号成功的系统自动回复邮件中），第一次登录可能还会要求您确认证书（输入<code>yes</code>即可）。</p>
+<h4 id="如何用-VNC-连接远程桌面"><a href="#如何用-VNC-连接远程桌面" class="headerlink" title="如何用 VNC 连接远程桌面"></a>如何用 VNC 连接远程桌面</h4><p>FICS 集群给每个用户分配了一个 VNC 端口，每个用户可以自行决定 VNC 服务的开关。在 SSH 登录后，您可以输入 <code>vnc</code>查看当前用户的 VNC 状态和端口：</p>
+<p><img src="/about/fics/fics-vnc.jpg" alt="FICS VNC Status"></p>
+<p>请记住您的 VNC 端口，一般情况下它会是 <code>5900 + userID</code>，比如上图中的 <code>5908</code>。</p>
+<p>用户通过 <code>vnc</code> 指令可以管理自己的 VNC 服务。</p>
+<ul>
+<li><code>vnc start</code> - 启动 VNC 服务。启动前请注意先设置 VNC 密码，否则 VNC 服务无法正常启动；</li>
+<li><code>vnc stop</code> - 停用 VNC 服务；</li>
+<li><code>vnc restart</code> - 重启 VNC 服务（遇到了奇怪的环境或显示问题，不妨先试试这个）；</li>
+<li><code>vncpasswd</code> - 设置 VNC 密码（注意这个命令中间是没有空格的！）。</li>
+</ul>
+<p>如果您已成功启动 VNC 服务，您可以使用 VNC 客户端访问您的远程桌面了。在这之前，由于上述 VNC 端口指的是登陆节点的端口，不是您本机的端口，因此您还需要先通过 SSH 进行端口转发，将这个端口映射到您本地的某个端口。您只需要在 SSH 登录时附带上 <code>-L 本地端口:localhost:服务器VNC端口</code> 参数即可，比如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh username@fics.local.zhutmost.com -L 60000:localhost:5908</span><br><span class="line"><span class="comment"># 60000是您的本地的端口，10000-65535之间可以随便选（不要和自己电脑上其他服务冲突就行）</span></span><br><span class="line"><span class="comment"># 5908是您的 VNC 端口，在上面的步骤中由服务器分配的</span></span><br></pre></td></tr></table></figure>
+<p>只要您的 SSH 连接不断开，您就可以利用 VNC 客户端连接 <code>localhost:60000</code> 来访问您的远程桌面了。VNC 客户端有很多，您可以自行选择：</p>
+<ul>
+<li>RealVNC VNC Viewer（Windows&#x2F;Linux&#x2F;macOS，需另行安装，<a target="_blank" rel="noopener" href="https://www.realvnc.com/en/connect/download/viewer">官网下载</a>）；</li>
+<li>Remmina（Ubuntu 等部分 Linux 发行版自带）；</li>
+<li>macOS 自带（Finder文件管理器窗口下按下 <code>Cmd</code>+<code>K</code>，然后输入 <code>vnc://localhost:60000</code>）。</li>
+</ul>
+<p>请注意在 VNC 使用中，上述 SSH 连接不能断开（不要关闭 Terminal 或 PowerShell 窗口）。</p>
+<p>VNC 桌面分辨率的设置和本地的 Linux 桌面设置方法一致，您可以在 VNC 桌面左上角的设置里找。</p>
+<h4 id="FICS-的文件存储"><a href="#FICS-的文件存储" class="headerlink" title="FICS 的文件存储"></a>FICS 的文件存储</h4><p>尽管用户仅在登录节点 <code>mgmt01</code> 上操作，但对于计算节点来说，但是由于用户提交的任务需要计算节点读取相应的文件，因此以下目录都是所有节点可见的：</p>
+<table>
+<thead>
+<tr>
+<th align="left">文件夹</th>
+<th align="left">位置</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">用户 <code>HOME</code> 目录</td>
+<td align="left"><code>/capsule/home/USERNAME</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">EDA 目录</td>
+<td align="left"><code>/capsule-ng/eda</code></td>
+<td align="left">分布式存储</td>
+</tr>
+<tr>
+<td align="left">PDK 目录</td>
+<td align="left"><code>/capsule/pdk</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">其他软件目录</td>
+<td align="left"><code>/capsule/opt</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">分布式通用存储目录</td>
+<td align="left"><code>/lamport/shared</code></td>
+<td align="left">分布式存储</td>
+</tr>
+<tr>
+<td align="left">分布式 GPU 队列存储目录</td>
+<td align="left"><code>/lamport/makkapakka</code></td>
+<td align="left">分布式存储，仅 GPU 队列 <code>makkapakka</code> 可见</td>
+</tr>
+</tbody></table>
+<p>其中，</p>
+<ul>
+<li><code>/capsule</code> 目录（包括 HOME 目录和 PDK 等）是存储在 Capsule 储存节点服务器上的，文件 I&#x2F;O 服务质量可能受该服务器的负载情况影响；</li>
+<li><code>/lamport</code> 目录和 <code>/lamport/shared</code> 目录均是分布式存储，不受单个节点影响，有较高的 I&#x2F;O 带宽（但对于大量小文件的情形会不太友好）；</li>
+<li><code>/lamport/makkapakka</code> 和 <code>/lamport/shared</code> 类似，但它仅对 GPU 队列 <code>makkapakka</code> 可见；</li>
+<li>我们为绝大多数共享目录都设置了内存缓存，以改善 I&#x2F;O 性能。</li>
+</ul>
+<p>因此，我们建议您尽可能将 EDA&#x2F;AI 任务的大规模文件 I&#x2F;O （例如 AI 数据集、仿真波形等）放在 <code>/lamport/shared</code>  或 <code>/lamport/makkapakka</code> 目录下，以获得更好的综合 I&#x2F;O 性能。如果需要使用的话，您可以在对应的 <code>/lamport/shared</code>  或 <code>/lamport/makkapakka</code> 目录下创建一个和您的用户名完全一致的文件夹，把您的个人数据放在其中。</p>
+<p>此外，任何情况下都不要在您的 <code>HOME</code> 目录下进行大规模文件 I&#x2F;O（比如执行一些 Python 批处理脚本），会导致所有人都会变卡顿。</p>
+<h3 id="任务的提交与管理"><a href="#任务的提交与管理" class="headerlink" title="任务的提交与管理"></a>任务的提交与管理</h3><p>FICS 采用 SLURM 调度器进行计算任务到节点的分发。您可以阅读<a target="_blank" rel="noopener" href="https://slurm.schedmd.com/documentation.html">官方文档</a>获取完整的 SLURM 使用方法。</p>
+<p>这里仅列出一些常用的命令供参考：</p>
+<ul>
+<li><code>sinfo</code> - 查看集群节点状态（应该能看到 <code>hopfield</code>&#x2F;<code>boltzmann</code>&#x2F;<code>makkapakka</code> 三组队列）；</li>
+<li><code>squeue</code> - 查看当前队列中的任务；<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">squeue -u hzzhu <span class="comment"># 查看 hzzhu 用户的任务</span></span><br><span class="line">squeue -p boltzmann <span class="comment"># 查看 Boltzmann 队列上正在进行的任务</span></span><br></pre></td></tr></table></figure></li>
+<li><code>scancel</code> - 取消已提交的任务；<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scancel JOB_ID <span class="comment"># 取消 JOB_ID 对应的任务，JOB_ID 可以通过 squeue 查看</span></span><br></pre></td></tr></table></figure></li>
+<li><code>srun</code> - 提交交互式任务（不太熟悉 SLURM 的用户可以考虑使用 <code>ilaunch</code>&#x2F;<code>zlaunch</code> 代替）；</li>
+<li><code>sbatch</code> - 提交批处理任务；</li>
+</ul>
+<p>考虑到不少 FICS 用户对于 Linux 的了解比较有限，我们对 <code>srun</code> 进行了简化的包装，帮助您更加简便地提交带图形界面的 EDA&#x2F;AI 任务：</p>
+<ul>
+<li><code>ilaunch</code> - 我们已经在 <code>PATH</code> 中添加了 <code>ilaunch</code> 命令，您可以直接使用它来提交任务。<a target="_blank" rel="noopener" href="https://github.com/cihlab/survive-guide/blob/main/fics/ilaunch.md">使用文档还在施工</a>，暂时可以参考：<ul>
+<li><code>ilaunch virtuoso</code> - 将 EDA 软件分配到集群中去运行</li>
+<li><code>ilaunch load ic/618 virtuoso</code> - 可实现加载特别版本的 EDA 软件</li>
+<li><code>ilaunch q makkapakka python</code> - 参数 <code>q</code> 可以切换不同的计算队列，默认为 Hopfield</li>
+<li><code>ilaunch list</code> - 可以打印当前已加载 EDA 列表</li>
+</ul>
+</li>
+<li><code>zlaunch</code> - 与 <code>ilaunch</code> 类似，它是由 <a target="_blank" rel="noopener" href="https://github.com/zhutmost">Haozhe Zhu</a> 个人维护的。<a target="_blank" rel="noopener" href="https://github.com/cihlab/zlaunch">使用文档</a></li>
+</ul>
+<h3 id="EDA-软件环境设置"><a href="#EDA-软件环境设置" class="headerlink" title="EDA 软件环境设置"></a>EDA 软件环境设置</h3><p>我们设置了一套开箱即用的 EDA 环境，无需配置。默认加载的 EDA 软件及其版本如下：</p>
+<details>
+<summary> 点击展开显示 </summary>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">// ansys</span><br><span class="line">EM/21.1             powerartist/2021R2.2</span><br><span class="line">// comsol</span><br><span class="line">multiphysics/5.5</span><br><span class="line">// xpeedic</span><br><span class="line">metis/2023.01       snpexpert/2022.01</span><br><span class="line">// xilinx</span><br><span class="line">vivado/2020</span><br><span class="line">// mathworks</span><br><span class="line">matlab/2020b</span><br><span class="line">// keysight</span><br><span class="line">ads/2021u2</span><br><span class="line">// mentor</span><br><span class="line">calibre/2020.3      modelsim/10.4c      powerpro/10.3c      tessent/2020.3</span><br><span class="line">// synopsys</span><br><span class="line">txs/2019.03         coretools/2017.06   nicc/2019.03        powerep/2020.03     hspice/2019.06      fusioncompiler/2019.12</span><br><span class="line">icv/2019.12         spyglass/2019.06    xa/2018.09          ppwr/2019.03        syn/2019.03         siliconsmart/2019.06</span><br><span class="line">verdi/2020.03       vc_static/2020.03   finesim/2020.03     prime/2019.03       sentaurus/2019.03   wv/2019.06</span><br><span class="line">icc2/2019.12        lc/2019.03          starrc/2019.03      vcs/2020.03         fm/2019.12</span><br><span class="line">// cadence</span><br><span class="line">genus/20.1          jasper/2020.09      ssv/17.1            confrml/20.22       innovus/19.1        peakview/5.1</span><br><span class="line">skillpro/4.2F       emx/5.6             liberate/18.1       xcelium/17.1        ic/618              qrc/16.1</span><br><span class="line">spectre/19.1</span><br><span class="line">// systools</span><br><span class="line">htop/2.2.0          python/3.9</span><br></pre></td></tr></table></figure>
+</details>
+
+
+<p>如果您觉得已默认加载的软件的版本可以接受，可以忽略本节下面的内容。</p>
+<p>FICS 采用 <code>module</code> 管理 EDA 软件环境。您可以阅读<a target="_blank" rel="noopener" href="https://modules.readthedocs.io/en/latest">官方文档</a>获取完整的 <code>module</code> 使用方法。</p>
+<p>这里仅列出一些常用的命令供参考：</p>
+<ul>
+<li><code>module avail</code> - 检查当前可用的 EDA 软件（<code>&lt;L&gt;</code> 后缀表示已加载，<code>(default)</code>后缀表示默认）；</li>
+<li><code>module load syn/2019.03</code> - 加载指定的 EDA 软件（这里以 <code>syn/2019.03</code> 为例）；</li>
+<li><code>module list</code> - 列出已加载的全部 EDA 软件；</li>
+<li><code>module purge</code> - 卸载所有已加载的 EDA 软件。</li>
+<li><code>module unload syn/2019.03</code> - 卸载指定的 EDA 软件（这里以 <code>syn/2019.03</code> 为例），一般不需要使用该命令；</li>
+</ul>
+<p>您可以通过 <code>module avail</code> 查看当前可用的 EDA 软件，通过 <code>module load</code> 加载相应的软件环境，比如：</p>
+<blockquote>
+<p>FICS 管理员无法处理 EDA 软件的使用问题，请您自行阅读 EDA 软件自带的文档；</p>
+<p>如果您需要 Synopsys EDA 全家桶的文档，您可以前往 <a target="_blank" rel="noopener" href="https://github.com/zhutmost">Haozhe Zhu</a> 的 <a target="_blank" rel="noopener" href="https://github.com/cihlab/survive-guide/blob/main/qnap-nas/README.md">NAS 服务器</a>获取。</p>
+</blockquote>
+<p><code>ilaunch</code> 在提交任务时，会使用默认的 EDA 环境（不会自动加载您已经 <code>module load</code> 的 EDA 软件），您可以参考 <code>ilaunch</code> 的文档。</p>
+<h3 id="GPU-炼丹相关"><a href="#GPU-炼丹相关" class="headerlink" title="GPU 炼丹相关"></a>GPU 炼丹相关</h3><p><a target="_blank" rel="noopener" href="https://github.com/cihlab/survive-guide/blob/main/fics/gpu-queue.md">TODO</a></p>
+<h2 id="FICS-的管理"><a href="#FICS-的管理" class="headerlink" title="FICS 的管理"></a>FICS 的管理</h2><p>绝大多数您的问题都可以通过阅读用户文档解决。<br>如果您在使用 FICS 的过程中遇到了难以解决的问题，除了在办公室内询问其他人，您也可以通过以下方式与管理员或其他用户交流。</p>
+<h3 id="微信协调群"><a href="#微信协调群" class="headerlink" title="微信协调群"></a>微信协调群</h3><p>如果您需要与其他用户或管理员交流讨论关于 FICS 使用的任何问题，都可以加入微信群。因为微信群的二维码会过期，所以这里就不附二维码了。</p>
+<p>您可以询问其他人邀请您加入微信群。绝大多数电路设计方向的老师都已经在群里了，您可以考虑询问他们。</p>
+<h3 id="邮件联系管理员"><a href="#邮件联系管理员" class="headerlink" title="邮件联系管理员"></a>邮件联系管理员</h3><p>FICS 目前由 <a target="_blank" rel="noopener" href="https://github.com/llfl">Kun Hu</a> 维护，<a target="_blank" rel="noopener" href="https://github.com/zhutmost">Haozhe Zhu</a> 协助。联系方式如下：</p>
+<ul>
+<li>Kun Hu（胡坤）：<code>i AT imux.top</code></li>
+<li>Haozhe Zhu（朱浩哲）：<code>zhuhz AT fudan.edu.cn</code></li>
+</ul>
+<p>请务必将上面所有管理员邮箱都列为收件人；如果您是芯片院的学生，请务必同时邮件抄送（<code>cc</code>）给您的日常指导老师。</p>
+<p>由于管理员都是兼职的，可能无法及时回复，请谅解。</p>
+</div><!--!--></article></div><!--!--><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><script src="https://utteranc.es/client.js" repo="zhutmost/zhutmost.github.io" issue-term="pathname" label="utterances" theme="github-light" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.jpeg" alt="Haozhe Zhu"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Haozhe Zhu</p><p class="is-size-6 is-block">IC &amp; AI Developer</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Shanghai, China</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">2</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/zhutmost" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/zhutmost"><i class="fa-brands fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Google Scholar" href="https://scholar.google.com/citations?user=L9U6i6YAAAAJ&amp;hl=en"><i class="fa-brands fa-google"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/atom.xml"><i class="fa-solid fa-rss"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Mail" href="mailto:zhutmost@outlook.com"><i class="fas fa-envelope"></i></a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#FICS-总体情况介绍"><span class="level-left"><span class="level-item">1</span><span class="level-item">FICS 总体情况介绍</span></span></a></li><li><a class="level is-mobile" href="#用户文档"><span class="level-left"><span class="level-item">2</span><span class="level-item">用户文档</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#账号管理"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">账号管理</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#账号申请"><span class="level-left"><span class="level-item">2.1.1</span><span class="level-item">账号申请</span></span></a></li><li><a class="level is-mobile" href="#密码重置"><span class="level-left"><span class="level-item">2.1.2</span><span class="level-item">密码重置</span></span></a></li><li><a class="level is-mobile" href="#获取-FICS-文档"><span class="level-left"><span class="level-item">2.1.3</span><span class="level-item">获取 FICS 文档</span></span></a></li><li><a class="level is-mobile" href="#更改默认-Shell"><span class="level-left"><span class="level-item">2.1.4</span><span class="level-item">更改默认 Shell</span></span></a></li></ul></li><li><a class="level is-mobile" href="#基本使用"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">基本使用</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#如何登录-FICS"><span class="level-left"><span class="level-item">2.2.1</span><span class="level-item">如何登录 FICS</span></span></a></li><li><a class="level is-mobile" href="#如何用-VNC-连接远程桌面"><span class="level-left"><span class="level-item">2.2.2</span><span class="level-item">如何用 VNC 连接远程桌面</span></span></a></li><li><a class="level is-mobile" href="#FICS-的文件存储"><span class="level-left"><span class="level-item">2.2.3</span><span class="level-item">FICS 的文件存储</span></span></a></li></ul></li><li><a class="level is-mobile" href="#任务的提交与管理"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">任务的提交与管理</span></span></a></li><li><a class="level is-mobile" href="#EDA-软件环境设置"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">EDA 软件环境设置</span></span></a></li><li><a class="level is-mobile" href="#GPU-炼丹相关"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">GPU 炼丹相关</span></span></a></li></ul></li><li><a class="level is-mobile" href="#FICS-的管理"><span class="level-left"><span class="level-item">3</span><span class="level-item">FICS 的管理</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#微信协调群"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">微信协调群</span></span></a></li><li><a class="level is-mobile" href="#邮件联系管理员"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">邮件联系管理员</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><figure class="media-left"><a class="image" href="/Research/asic-conf-ddl-2024/"><img src="/thumbnail/near-sorrento-jbrett.jpg" alt="2024年智能芯片领域会议概览"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-08-14T06:31:19.000Z">2023-08-14</time></p><p class="title"><a href="/Research/asic-conf-ddl-2024/">2024年智能芯片领域会议概览</a></p><p class="categories"><a href="/categories/Research/">Research</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/Engineering/chipmunk-stream/"><img src="/thumbnail/chipmunk-thumbnail.jpg" alt="🐿️ Chipmunk Docs - DecoupledIO 增强版之 StreamIO"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-08-09T06:07:49.239Z">2023-08-09</time></p><p class="title"><a href="/Engineering/chipmunk-stream/">🐿️ Chipmunk Docs - DecoupledIO 增强版之 StreamIO</a></p><p class="categories"><a href="/categories/Engineering/">Engineering</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/Engineering/chipmunk-bits-misc/"><img src="/thumbnail/chipmunk-thumbnail.jpg" alt="🐿️ Chipmunk - Bits/Data 等的更多方法"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-06-10T13:21:59.059Z">2023-06-10</time></p><p class="title"><a href="/Engineering/chipmunk-bits-misc/">🐿️ Chipmunk - Bits/Data 等的更多方法</a></p><p class="categories"><a href="/categories/Engineering/">Engineering</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/Engineering/chipmunk-regneg/"><img src="/thumbnail/chipmunk-thumbnail.jpg" alt="🐿️ Chipmunk - 下降沿触发寄存器 RegNeg"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-06-02T15:12:02.048Z">2023-06-02</time></p><p class="title"><a href="/Engineering/chipmunk-regneg/">🐿️ Chipmunk - 下降沿触发寄存器 RegNeg</a></p><p class="categories"><a href="/categories/Engineering/">Engineering</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/Engineering/chipmunk-master-slave/"><img src="/thumbnail/chipmunk-thumbnail.jpg" alt="🐿️ Chipmunk - 用 Master/Slave 定义 Bundle 方向"></a></figure><div class="media-content"><p class="date"><time dateTime="2023-04-20T16:28:02.000Z">2023-04-21</time></p><p class="title"><a href="/Engineering/chipmunk-master-slave/">🐿️ Chipmunk - 用 Master/Slave 定义 Bundle 方向</a></p><p class="categories"><a href="/categories/Engineering/">Engineering</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Engineering/"><span class="level-start"><span class="level-item">Engineering</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/Research/"><span class="level-start"><span class="level-item">Research</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI-Chip/"><span class="tag">AI Chip</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chipmunk/"><span class="tag">Chipmunk</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chisel/"><span class="tag">Chisel</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/FPGA/"><span class="tag">FPGA</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GitHub/"><span class="tag">GitHub</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/PYNQ/"><span class="tag">PYNQ</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Paper-Lives-Matter/"><span class="tag">Paper Lives Matter</span><span class="tag">2</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.png" alt="Haozhe Zhu&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2023 Haozhe Zhu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="GitHub" href="https://github.com/zhutmost"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

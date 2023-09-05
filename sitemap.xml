@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://zhutmost.com/about/fics.html</loc>
+    
+    <lastmod>2023-09-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://zhutmost.com/Engineering/chipmunk-master-slave/</loc>
     
     <lastmod>2023-08-16</lastmod>
@@ -85,7 +94,7 @@
 
   <url>
     <loc>https://zhutmost.com/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -93,49 +102,49 @@
   
   <url>
     <loc>https://zhutmost.com/tags/Paper-Lives-Matter/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/AI-Chip/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/Chisel/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/Chipmunk/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/GitHub/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/FPGA/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/PYNQ/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -144,14 +153,14 @@
   
   <url>
     <loc>https://zhutmost.com/categories/Research/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/categories/Engineering/</loc>
-    <lastmod>2023-08-16</lastmod>
+    <lastmod>2023-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
