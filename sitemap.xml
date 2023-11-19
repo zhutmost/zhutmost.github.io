@@ -2,18 +2,45 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://zhutmost.com/Research/asic-conf-ddl-2024/</loc>
+    <loc>https://zhutmost.com/about/fics.html</loc>
     
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-17</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://zhutmost.com/about/fics.html</loc>
+    <loc>https://zhutmost.com/about/index.html</loc>
     
-    <lastmod>2023-09-21</lastmod>
+    <lastmod>2023-11-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/Research/asic-conf-ddl-2024/</loc>
+    
+    <lastmod>2023-11-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/Engineering/github-ssh-443/</loc>
+    
+    <lastmod>2023-11-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhutmost.com/Engineering/pynq-compile/</loc>
+    
+    <lastmod>2023-11-17</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -56,24 +83,6 @@
   </url>
   
   <url>
-    <loc>https://zhutmost.com/Engineering/pynq-compile/</loc>
-    
-    <lastmod>2023-08-16</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://zhutmost.com/Engineering/github-ssh-443/</loc>
-    
-    <lastmod>2023-08-16</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://zhutmost.com/Research/asic-conf-ddl-2023/</loc>
     
     <lastmod>2023-08-14</lastmod>
@@ -82,19 +91,10 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://zhutmost.com/about/index.html</loc>
-    
-    <lastmod>2023-01-05</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>https://zhutmost.com/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -102,49 +102,49 @@
   
   <url>
     <loc>https://zhutmost.com/tags/Paper-Lives-Matter/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/AI-Chip/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/Chisel/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/Chipmunk/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/GitHub/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/FPGA/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/tags/PYNQ/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -153,14 +153,14 @@
   
   <url>
     <loc>https://zhutmost.com/categories/Research/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://zhutmost.com/categories/Engineering/</loc>
-    <lastmod>2023-11-09</lastmod>
+    <lastmod>2023-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
